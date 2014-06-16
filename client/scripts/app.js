@@ -22,7 +22,7 @@ var app = {
     var newDiv = $('<div></div>');
     newDiv.append("<a href='#' class='username'>" + message.username + "</a>");
     newDiv.append("<a href='#' id='roomtag'>" + message.roomname + "</a>");
-    newDiv.append("<p id='messages'>" + message.text + "</p>" + "</div>");
+    newDiv.append("<p id='messages'>" + JSON.stringify(message.text) + "</p>" + "</div>");
     $('#chats').append(newDiv);
   },
   display: function(data) {
@@ -35,12 +35,20 @@ var app = {
     setInterval(function() {
       app.clearMessages();
       app.fetch();
-    }, 3000);
+    }, 5000);
   },
   server: 'https://api.parse.com/1/classes/chatterbox',
+  handleSubmit: function(text, username, room){
+    var message = {
+      'username': username,
+      'text': text,
+      'roomname': room
+    };
+    app.send(message);
+  },
   send: function(message) {
     $.ajax({
-      url: 'https://api.parse.com/1/classes/chatterbox',
+      url: app.server,
       type: 'POST',
       data: JSON.stringify(message),
       contentType: 'application/json',
@@ -54,7 +62,7 @@ var app = {
   },
   fetch: function() {
     $.ajax({
-      url: 'https://api.parse.com/1/classes/chatterbox',
+      url: app.server + '?order=-createdAt',
       type: 'GET',
       success: function(data) {
         app.display(data);
@@ -66,6 +74,7 @@ var app = {
   }
 };
 
+app.fetch();
 
 $(document).ready(function() {
 
@@ -73,6 +82,12 @@ $(document).ready(function() {
     var user = $(this).text();
     app.addFriend(user);
     console.log(app._friendList);
+  });
+  $('body').on('click', '.btn', function(){
+    var msg = $('textarea').val();
+    $('textarea').val("");
+    console.log(msg);
+    app.handleSubmit(msg,'Phils Lost Beard', 'SadSadPlace');
   });
 
 app.init();

@@ -1,9 +1,11 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
     <title>chatterbox</title>
     <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="bower_components/bootstrap-css-only/css/bootstrap.css">
+
 
     <!-- dependencies -->
     <script src="bower_components/underscore/underscore.js"></script>
@@ -14,6 +16,8 @@
   </head>
   <body>
     <div id="main">
+      <textarea rows="7" id="message"></textarea>
+      <button class='btn btn-primary' id="send">Send Message</button>
       <h1>chatterbox</h1>
       <!-- Your HTML goes here! -->
       <div id='friendList'></div>
