@@ -14,15 +14,15 @@ var app = {
     }
   },
   addRoom : function(roomname){
-      if(!app._roomList[roomname] && roomname !== undefined) {
+      if(!app._roomList[roomname] && roomname !== undefined && roomname.length > 0) {
         app._roomList[roomname] = roomname;
-        $('#roomSelect').append('<a id="roomtag">'+ roomname +'</a>');
+        $('.btn-group').append('<a class="btn dropdown-toggle" data-toggle="dropdown" id="roomtag">'+ roomname +'</a>');
       }
   },
   addMessage: function(message){
     var newDiv = $('<div></div>');
     newDiv.append("<a href='#' class='username'>" + _.escape(message.username) + "</a>");
-    newDiv.append("<a href='#' id='roomtag'>" + _.escape(message.roomname) + "</a>");
+    newDiv.append("<a href='#' id='roomtag'>" + _.escape(app._selectedRoom) + "</a>");
     newDiv.append("<p id='messages'>" + _.escape(message.text) + "</p>" + "</div>");
     $('#chats').append(newDiv);
   },
@@ -42,10 +42,13 @@ var app = {
   },
   server: 'https://api.parse.com/1/classes/chatterbox',
   handleSubmit: function(text, username, room){
+    if(room = 'all'){
+      room = '';
+    }
     var message = {
       'username': username,
       'text': text,
-      'roomname': room
+      'roomname': app._selectedRoom
     };
     app.send(message);
   },
@@ -56,10 +59,10 @@ var app = {
       data: JSON.stringify(message),
       contentType: 'application/json',
       success: function(data) {
-        console.log(data);
+        console.log("Message sent");
       },
       error: function(data) {
-        console.log('could not send');
+        console.log('Error: Message not sent');
       }
     });
   },
@@ -71,7 +74,7 @@ var app = {
         app.display(data);
       },
       error: function() {
-        console.log('could not fetch');
+        console.log('Erro: Could not fetch');
       }
     });
   }
@@ -88,16 +91,16 @@ $(document).ready(function() {
   $('body').on('click', '#send', function(){
     var msg = $('textarea').val();
     $('textarea').val("");
-    console.log(msg);
-    app.handleSubmit(msg,'Albrey\'s Dance Moves' , 'Sad Lonely Dark Place');
+    console.log(app._selectedRoom);
+    app.handleSubmit(msg,'Albrey\'s Dance Moves' , app._selectedRoom);
   });
   $('body').on('click', '#roomtag', function() {
     app._selectedRoom = $(this).text();
-    console.log(app._selectedRoom);
+    console.log('Switched Room: ' + app._selectedRoom);
   });
   $('body').on('click', '#allRooms', function(){
     app._selectedRoom = 'all';
-    console.log(app._selectedRoom);
+    console.log('Switched Room: ' + app._selectedRoom);
   });
   app.init();
 
