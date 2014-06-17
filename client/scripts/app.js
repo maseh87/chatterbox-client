@@ -3,6 +3,7 @@
 var app = {
   _roomList : {},
   _friendList : {},
+  _selectedRoom : 'all',
   clearMessages: function(){
     $('#chats').empty();
   },
@@ -15,25 +16,27 @@ var app = {
   addRoom : function(roomname){
       if(!app._roomList[roomname] && roomname !== undefined) {
         app._roomList[roomname] = roomname;
-        $('#roomSelect').append('<a>'+ roomname +'</a>');
+        $('#roomSelect').append('<a id="roomtag">'+ roomname +'</a>');
       }
   },
   addMessage: function(message){
     var newDiv = $('<div></div>');
-    newDiv.append("<a href='#' class='username'>" + JSON.stringify(message.username) + "</a>");
-    newDiv.append("<a href='#' id='roomtag'>" + JSON.stringify(message.roomname) + "</a>");
-    newDiv.append("<p id='messages'>" + JSON.stringify(message.text) + "</p>" + "</div>");
+    newDiv.append("<a href='#' class='username'>" + _.escape(message.username) + "</a>");
+    newDiv.append("<a href='#' id='roomtag'>" + _.escape(message.roomname) + "</a>");
+    newDiv.append("<p id='messages'>" + _.escape(message.text) + "</p>" + "</div>");
     $('#chats').append(newDiv);
   },
   display: function(data) {
+    app.clearMessages();
     _.each(data.results, function(chatObj) {
-      app.addMessage(chatObj);
+      if(app._selectedRoom === 'all' || chatObj.roomname === app._selectedRoom){
+        app.addMessage(chatObj);
+      }
       app.addRoom(chatObj.roomname);
     });
   },
   init: function() {
     setInterval(function() {
-      app.clearMessages();
       app.fetch();
     }, 5000);
   },
@@ -81,16 +84,22 @@ $(document).ready(function() {
   $('body').on('click', '.username', function() {
     var user = $(this).text();
     app.addFriend(user);
-    console.log(app._friendList);
   });
-  $('body').on('click', '.btn', function(){
+  $('body').on('click', '#send', function(){
     var msg = $('textarea').val();
     $('textarea').val("");
     console.log(msg);
-    app.handleSubmit(msg,'Phils Lost Beard', 'SadSadPlace');
+    app.handleSubmit(msg,'Albrey\'s Dance Moves' , 'Sad Lonely Dark Place');
   });
-
-app.init();
+  $('body').on('click', '#roomtag', function() {
+    app._selectedRoom = $(this).text();
+    console.log(app._selectedRoom);
+  });
+  $('body').on('click', '#allRooms', function(){
+    app._selectedRoom = 'all';
+    console.log(app._selectedRoom);
+  });
+  app.init();
 
 });
 
