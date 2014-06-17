@@ -86,3 +86,15 @@ form input[type=text] {
 textarea {
     width: 400px;
 }
+
+.friendList {
+    font-weight: bolder;
+}
+
+#messageRoom {
+    float: right;
+}
+
+.chatMessages {
+    border: 1px solid black;
+}

@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>chatterbox</title>
-    <link rel="stylesheet" href="styles/styles.css">
     <link rel="stylesheet" href="bower_components/bootstrap-css-only/css/bootstrap.css">
+    <link rel="stylesheet" href="styles/styles.css">
 
 
     <!-- dependencies -->
@@ -17,17 +17,18 @@
     <script src="scripts/app.js"></script>
   </head>
   <body>
+    <div class='row'>
+      <div class="btn-group span4"></div>
+    </div>
     <div id="main">
-      <button class='btn btn-primary' id="allRooms">See all ChatRooms</button>
-        <div class="btn-group"></div>
+        <button class='btn btn-primary' id="allRooms">See all ChatRooms</button>
       <h1>chatterbox</h1>
       <textarea rows="7" id="message"></textarea>
       <button class='btn btn-primary' id="send">Send Message</button>
       <!-- Your HTML goes here! -->
       <div id='friendList'></div>
       <div id="roomSelect"></div>
-      <div id="chats">
-      </div>
+      <div id="chats"></div>
     </div>
   </body>
 </html>
