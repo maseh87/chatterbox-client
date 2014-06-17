@@ -13,15 +13,15 @@ var app = {
     }
   },
   addRoom : function(roomname){
-      if(!app._roomList[roomname]) {
+      if(!app._roomList[roomname] && roomname !== undefined) {
         app._roomList[roomname] = roomname;
         $('#roomSelect').append('<a>'+ roomname +'</a>');
       }
   },
   addMessage: function(message){
     var newDiv = $('<div></div>');
-    newDiv.append("<a href='#' class='username'>" + message.username + "</a>");
-    newDiv.append("<a href='#' id='roomtag'>" + message.roomname + "</a>");
+    newDiv.append("<a href='#' class='username'>" + JSON.stringify(message.username) + "</a>");
+    newDiv.append("<a href='#' id='roomtag'>" + JSON.stringify(message.roomname) + "</a>");
     newDiv.append("<p id='messages'>" + JSON.stringify(message.text) + "</p>" + "</div>");
     $('#chats').append(newDiv);
   },
